@@ -1,0 +1,11 @@
+{
+  "type": "module",
+  "scripts": {
+    "test": "shx rm -r dist && tsc && node dist/index.test.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.11",
+    "shx": "^0.3.4",
+    "typescript": "^5.5.3"
+  }
+}
