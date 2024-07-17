@@ -14,9 +14,9 @@ async function runTest(description: string, test: () => Promise<void>) {
   console.log(description);
   try {
     await test();
-    console.log(`\u001b[32mTest ${thisCounter} passed!\u001b[0m`);
+    console.log(`\u001b[32mTest ${thisCounter} passed!\u001b[0m\n`);
   } catch (e) {
-    console.error(`\u001b[31mTest ${thisCounter} failed!\u001b[0m`);
+    console.error(`\u001b[31mTest ${thisCounter} failed!\u001b[0m\n`);
     console.error(e);
   }
 }
@@ -32,21 +32,21 @@ await runTest(
 );
 
 await runTest(
-  "camelToSnake for base objects should work properly",
-  async () => {
-    const camel = { playerName: "LeBron James", totalScore: 56 };
-    const expected = { player_name: "LeBron James", total_score: 56 };
-    const actual = camelToSnake(camel);
-    deepStrictEqual(actual, expected);
-  }
-);
-
-await runTest(
   "snakeToCamelConverter should convert snake_case string to camelCase",
   async () => {
     const snakeString = "player_name";
     const expected = "playerName";
     const actual = snakeToCamelConverter(snakeString);
+    deepStrictEqual(actual, expected);
+  }
+);
+
+await runTest(
+  "camelToSnake for base objects should work properly",
+  async () => {
+    const camel = { playerName: "LeBron James", totalScore: 56 };
+    const expected = { player_name: "LeBron James", total_score: 56 };
+    const actual = camelToSnake(camel);
     deepStrictEqual(actual, expected);
   }
 );
@@ -60,3 +60,65 @@ await runTest(
     deepStrictEqual(actual, expected);
   }
 );
+
+await runTest(
+  "camelToSnake should convert each element in an array",
+  async () => {
+    const camel = [
+      { playerName: "LeBron James", totalScore: 56 },
+      { playerName: "Stephen Curry", totalScore: 38 },
+    ];
+    const expected = [
+      { player_name: "LeBron James", total_score: 56 },
+      { player_name: "Stephen Curry", total_score: 38 },
+    ];
+    const actual = camelToSnake(camel);
+    deepStrictEqual(actual, expected);
+  }
+);
+
+await runTest(
+  "snakeToCamel should convert each element in an array",
+  async () => {
+    const snake = [
+      { player_name: "LeBron James", total_score: 56 },
+      { player_name: "Stephen Curry", total_score: 38 },
+    ];
+    const expected = [
+      { playerName: "LeBron James", totalScore: 56 },
+      { playerName: "Stephen Curry", totalScore: 38 },
+    ];
+    const actual = snakeToCamel(snake);
+    deepStrictEqual(actual, expected);
+  }
+);
+
+await runTest("camelToSnake should convert nested objects", async () => {
+  const camel = {
+    playerName: "LeBron James",
+    totalScore: 56,
+    teamInfo: { teamName: "Cavaliers", location: "Cleveland" },
+  };
+  const expected = {
+    player_name: "LeBron James",
+    total_score: 56,
+    team_info: { team_name: "Cavaliers", location: "Cleveland" },
+  };
+  const actual = camelToSnake(camel);
+  deepStrictEqual(actual, expected);
+});
+
+await runTest("snakeToCamel should convert nested objects", async () => {
+  const snake = {
+    player_name: "LeBron James",
+    total_score: 56,
+    team_info: { team_name: "Cavaliers", location: "Cleveland" },
+  };
+  const expected = {
+    playerName: "LeBron James",
+    totalScore: 56,
+    teamInfo: { teamName: "Cavaliers", location: "Cleveland" },
+  };
+  const actual = snakeToCamel(snake);
+  deepStrictEqual(actual, expected);
+});

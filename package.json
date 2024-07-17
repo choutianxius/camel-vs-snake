@@ -1,11 +1,20 @@
 {
+  "author": "choutianxius",
+  "description": "Utilities for converting object attribute names between camelCase and snake_case",
+  "homepage": "https://github.com/choutianxius/camel-vs-snake",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
-    "test": "shx rm -r dist && tsc && node dist/index.test.js"
+    "build": "shx rm -r dist && tsc",
+    "test": "node ./scripts/test-runner.js"
   },
   "devDependencies": {
     "@types/node": "^20.14.11",
+    "glob": "^11.0.0",
     "shx": "^0.3.4",
+    "tsx": "^4.16.2",
     "typescript": "^5.5.3"
   }
 }
