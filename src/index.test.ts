@@ -3,8 +3,8 @@ import { deepStrictEqual } from "node:assert/strict";
 import {
   camelToSnake,
   snakeToCamel,
-  camelToSnakeConverter,
-  snakeToCamelConverter,
+  camelStringToSnake,
+  snakeStringToCamel,
 } from "./index.js";
 
 let counter = 1;
@@ -22,21 +22,21 @@ async function runTest(description: string, test: () => Promise<void>) {
 }
 
 await runTest(
-  "camelToSnakeConverter should convert camelCase string to snake_case",
+  "camelStringToSnake should convert camelCase string to snake_case",
   async () => {
     const camelString = "playerName";
     const expected = "player_name";
-    const actual = camelToSnakeConverter(camelString);
+    const actual = camelStringToSnake(camelString);
     deepStrictEqual(actual, expected);
   }
 );
 
 await runTest(
-  "snakeToCamelConverter should convert snake_case string to camelCase",
+  "snakeStringToCamel should convert snake_case string to camelCase",
   async () => {
     const snakeString = "player_name";
     const expected = "playerName";
-    const actual = snakeToCamelConverter(snakeString);
+    const actual = snakeStringToCamel(snakeString);
     deepStrictEqual(actual, expected);
   }
 );

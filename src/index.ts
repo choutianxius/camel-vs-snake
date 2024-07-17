@@ -14,20 +14,20 @@ function base(keyConverter: (arg0: string) => string, o: object): object {
   return o1;
 }
 
-export function camelToSnakeConverter(camel: string): string {
+export function camelStringToSnake(camel: string): string {
   return camel.replace(/([A-Z])/g, "_$1").toLowerCase();
 }
 
-export function snakeToCamelConverter(snake: string): string {
+export function snakeStringToCamel(snake: string): string {
   return snake.replace(/_([a-z])/g, (group) =>
     group[1].replace("_", "").toUpperCase()
   );
 }
 
 export function camelToSnake(o: object): object {
-  return base(camelToSnakeConverter, o);
+  return base(camelStringToSnake, o);
 }
 
 export function snakeToCamel(o: object): object {
-  return base(snakeToCamelConverter, o);
+  return base(snakeStringToCamel, o);
 }
