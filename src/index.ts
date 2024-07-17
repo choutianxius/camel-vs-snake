@@ -1,4 +1,4 @@
-function base(keyConverter: (string) => string, o: object): object {
+function base(keyConverter: (arg0: string) => string, o: object): object {
   if (Array.isArray(o)) {
     return o.map((x) => base(keyConverter, x));
   }
