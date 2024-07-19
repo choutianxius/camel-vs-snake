@@ -1,17 +1,18 @@
-function base(keyConverter: (arg0: string) => string, o: object): object {
+function base(keyConverter: (arg0: string) => string, o: any): any {
+  if (!(o && typeof o === "object")) {
+    return o;
+  }
   if (Array.isArray(o)) {
     return o.map((x) => base(keyConverter, x));
   }
-  const o1 = {};
-  Object.entries(o).forEach(([key, value]) => {
-    const convertedKey = keyConverter(key);
-    if (typeof value === "object") {
-      o1[convertedKey] = base(keyConverter, value);
-    } else {
-      o1[convertedKey] = value;
-    }
-  });
-  return o1;
+  if (o?.constructor?.name !== "Object") {
+    return o;
+  }
+  const entries = Object.entries(o).map(([key, value]) => [
+    keyConverter(key),
+    base(keyConverter, value),
+  ]);
+  return Object.fromEntries(entries);
 }
 
 export function camelStringToSnake(camel: string): string {
@@ -24,10 +25,10 @@ export function snakeStringToCamel(snake: string): string {
   );
 }
 
-export function camelToSnake(o: object): object {
+export function camelToSnake(o: any): any {
   return base(camelStringToSnake, o);
 }
 
-export function snakeToCamel(o: object): object {
+export function snakeToCamel(o: any): any {
   return base(snakeStringToCamel, o);
 }

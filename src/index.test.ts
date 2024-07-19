@@ -1,4 +1,4 @@
-import { deepStrictEqual } from "node:assert/strict";
+import { deepStrictEqual, ok } from "node:assert/strict";
 
 import {
   camelToSnake,
@@ -8,16 +8,18 @@ import {
 } from "./index.js";
 
 let counter = 1;
+let hasError = false;
 
 async function runTest(description: string, test: () => Promise<void>) {
   const thisCounter = counter++;
   console.log(description);
   try {
     await test();
-    console.log(`\u001b[32mTest ${thisCounter} passed!\u001b[0m\n`);
+    console.log(`\n\n\u001b[32mTest ${thisCounter} passed!\u001b[0m\n`);
   } catch (e) {
-    console.error(`\u001b[31mTest ${thisCounter} failed!\u001b[0m\n`);
+    console.error(`\n\n\u001b[31mTest ${thisCounter} failed!\u001b[0m\n`);
     console.error(e);
+    hasError = true;
   }
 }
 
@@ -122,3 +124,96 @@ await runTest("snakeToCamel should convert nested objects", async () => {
   const actual = snakeToCamel(snake);
   deepStrictEqual(actual, expected);
 });
+
+await runTest(
+  "camelToSnake should return undefined for undefined",
+  async () => {
+    const camel = undefined;
+    const actual = camelToSnake(camel);
+    ok(typeof actual === "undefined");
+  }
+);
+
+await runTest(
+  "snakeToCamel should return undefined for undefined",
+  async () => {
+    const snake = undefined;
+    const actual = snakeToCamel(snake);
+    ok(typeof actual === "undefined");
+  }
+);
+
+await runTest(
+  "camelToSnake should return original value for primitives",
+  async () => {
+    const camels = [false, true, "Kobe Bryant", 1];
+    camels.forEach((camel) => {
+      const actual = camelToSnake(camel);
+      const expected = camel;
+      deepStrictEqual(actual, expected);
+    });
+  }
+);
+
+await runTest(
+  "snakeToCamel should return original value for primitives",
+  async () => {
+    const snakes = [false, true, "Kobe Bryant", 1];
+    snakes.forEach((snake) => {
+      const actual = snakeToCamel(snake);
+      const expected = snake;
+      deepStrictEqual(actual, expected);
+    });
+  }
+);
+
+await runTest(
+  "camelToSnake should return original value for non-dictionary objects",
+  async () => {
+    const camels = [null, new Date(), new URL("https://example.com")];
+    camels.forEach((camel) => {
+      const actual = camelToSnake(camel);
+      const expected = camel;
+      deepStrictEqual(actual, expected);
+    });
+  }
+);
+
+await runTest(
+  "snakeToCamel should return original value for non-dictionary objects",
+  async () => {
+    const snakes = [null, new Date(), new URL("https://example.com")];
+    snakes.forEach((snake) => {
+      const actual = snakeToCamel(snake);
+      const expected = snake;
+      deepStrictEqual(actual, expected);
+    });
+  }
+);
+
+await runTest(
+  "camelToSnake should return original value for functions",
+  async () => {
+    const camel = () => "foo";
+    const actual = camelToSnake(camel);
+    const expected = camel;
+    deepStrictEqual(actual, expected);
+  }
+);
+
+await runTest(
+  "snakeToCamel should return original value for functions",
+  async () => {
+    const snake = () => "foo";
+    const actual = snakeToCamel(snake);
+    const expected = snake;
+    deepStrictEqual(actual, expected);
+  }
+);
+
+if (hasError) {
+  console.error("\n\n\u001b[31mSome test(s) failed!\u001b[0m\n\n");
+  process.exit(1);
+} else {
+  console.log("\n\n\u001b[32mAll tests passed!\u001b[0m\n\n");
+}
