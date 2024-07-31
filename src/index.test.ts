@@ -1,4 +1,4 @@
-import { deepStrictEqual, ok } from "node:assert/strict";
+import { expect } from "bun:test";
 
 import {
   camelToSnake,
@@ -6,6 +6,14 @@ import {
   camelStringToSnake,
   snakeStringToCamel,
 } from "./index.js";
+
+function deepStrictEqual(actual: any, expected: any) {
+  expect(actual).toStrictEqual(expected);
+}
+
+function ok(actual: any) {
+  expect(actual).toBeTruthy();
+}
 
 let counter = 1;
 let hasError = false;

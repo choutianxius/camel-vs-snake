@@ -1,4 +1,5 @@
 {
+  "name": "camel-vs-snake",
   "author": "choutianxius",
   "description": "Utilities for converting object attribute names between camelCase and snake_case",
   "homepage": "https://github.com/choutianxius/camel-vs-snake",
@@ -7,13 +8,14 @@
   "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
-    "build": "shx rm -r dist && tsc",
-    "test": "tsx src/index.test.ts"
+    "build": "shx rm -rf dist && bun build src/index.ts --outdir=dist --minify",
+    "test": "bun src/index.test.ts"
   },
   "devDependencies": {
-    "@types/node": "^20.14.11",
     "shx": "^0.3.4",
-    "tsx": "^4.16.2",
-    "typescript": "^5.5.3"
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
   }
 }
